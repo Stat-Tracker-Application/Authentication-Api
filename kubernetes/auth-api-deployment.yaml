@@ -17,6 +17,23 @@ spec:
           image: lokitheshady/stat-tracker-auth-api:latest
           ports:
             - containerPort: 5300
+      env:
+        - name: AUTHDB_USER
+          valueFrom:
+            secretkeyref:
+              name: authdb-secret
+              value: authdb-user
+        - name: AUTHDB_PASSWORD
+          valueFrom:
+            secretkeyref:
+              name: authdb-secret
+              value: authdb-password
+        - name: MONGODB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: authdb-config
+              value: authdb-url
+
 ---
 apiVersion: v1
 kind: Service
