@@ -9,13 +9,16 @@ import "dotenv/config";
 const app = express();
 
 const CONNECTION_STRING = process.env.MONGO_URL;
+console.log(process.env.AUTHDB_USER);
+console.log(process.env.AUTHDB_PASSWORD);
 const username = Buffer.from(process.env.AUTHDB_USER, "base64").toString(
   "utf-8"
 );
 const password = Buffer.from(process.env.AUTHDB_PASSWORD, "base64").toString(
   "utf-8"
 );
-
+console.log(process.env.AUTHDB_USER);
+console.log(process.env.AUTHDB_PASSWORD);
 // MongoDB connection
 mongoose.connect(CONNECTION_STRING, {
   useNewUrlParser: true,

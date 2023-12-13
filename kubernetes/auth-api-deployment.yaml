@@ -15,24 +15,28 @@ spec:
       containers:
         - name: auth-api
           image: lokitheshady/stat-tracker-auth-api:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           ports:
             - containerPort: 5300
-      env:
-        - name: AUTHDB_USER
-          valueFrom:
-            secretkeyref:
-              name: authdb-secret
-              value: authdb-user
-        - name: AUTHDB_PASSWORD
-          valueFrom:
-            secretkeyref:
-              name: authdb-secret
-              value: authdb-password
-        - name: MONGODB_URL
-          valueFrom:
-            configMapKeyRef:
-              name: authdb-config
-              value: authdb-url
+          env:
+            - name: AUTHDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: authdb-secret
+                  key: authdb-user
+            - name: AUTHDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: authdb-secret
+                  key: authdb-password
+            - name: MONGODB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: authdb-config
+                  key: authdb-url
 
 ---
 apiVersion: v1
@@ -40,10 +44,11 @@ kind: Service
 metadata:
   name: stat-tracker-auth-api-service
 spec:
+  type: NodePort
   selector:
     app: stat-tracker-auth-api
   ports:
     - protocol: TCP
       port: 5300
       targetPort: 5300
-  type: LoadBalancer
+      nodePort: 30530
