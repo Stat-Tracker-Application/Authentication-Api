@@ -8,12 +8,22 @@ import "dotenv/config";
 
 const app = express();
 
-const CONNECTION_STRING = "mongodb://User1:Adminpw@Auth-Db:27017/Auth-Db"; //This can't remain here for obvious reasons
+const CONNECTION_STRING = process.env.MONGO_URL;
+const username = Buffer.from(process.env.AUTHDB_USER, "base64").toString(
+  "utf-8"
+);
+const password = Buffer.from(process.env.AUTHDB_PASSWORD, "base64").toString(
+  "utf-8"
+);
 
 // MongoDB connection
 mongoose.connect(CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  auth: {
+    user: username,
+    password: password,
+  },
 });
 
 const authSchema = new mongoose.Schema({

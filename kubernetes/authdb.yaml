@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authdb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authdb
+  template:
+    metadata:
+      labels:
+        app: authdb
+    spec:
+      containers:
+        - name: authdb
+          image: mongo:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretkeyref:
+                  name: authdb-secret
+                  key: authdb-user
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretkeyref:
+                  name: authdb-secret
+                  key: authdb-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authdb-service
+spec:
+  selector:
+    app: authdb
+  ports:
+    - port: 5350
+      targetPort: 27017
