@@ -18,16 +18,11 @@ const decodedPassword = Buffer.from(
 
 const encodedUsername = encodeURIComponent(decodedUsername);
 const encodedPassword = encodeURIComponent(decodedPassword);
-const CONNECTION_STRING = `mongodb://${encodedUsername}:${encodedPassword}@authdb-service:5350/?authSource=admin`;
-
+const CONNECTION_STRING = `mongodb://${encodedUsername}:${encodedPassword}@authdb-service:5350/admin`;
 // MongoDB connection
 mongoose.connect(CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  auth: {
-    user: decodedUsername,
-    password: decodedPassword,
-  },
 });
 
 console.log(CONNECTION_STRING);
