@@ -19,7 +19,9 @@ const password = Buffer.from(process.env.AUTHDB_PASSWORD, "base64").toString(
   "utf-8"
 );
 
-const CONNECTION_STRING = `mongodb://${username}:${password}@${process.env.MONGODB_URL}`;
+const encodedUsername = encodeURIComponent(username);
+const encodedPassword = encodeURIComponent(password);
+const CONNECTION_STRING = `mongodb://${encodedUsername}:${encodedPassword}@${process.env.MONGODB_URL}`;
 // MongoDB connection
 mongoose.connect(CONNECTION_STRING, {
   useNewUrlParser: true,
