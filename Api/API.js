@@ -30,6 +30,8 @@ mongoose.connect(CONNECTION_STRING, {
   },
 });
 
+console.log(CONNECTION_STRING);
+
 const authSchema = new mongoose.Schema({
   username: String,
   hashedpassword: String,
