@@ -18,7 +18,7 @@ const decodedPassword = Buffer.from(
 
 const encodedUsername = encodeURIComponent(decodedUsername);
 const encodedPassword = encodeURIComponent(decodedPassword);
-const CONNECTION_STRING = `mongodb://${encodedUsername}:${encodedPassword}@${process.env.MONGODB_URL}?authSource=admin`;
+const CONNECTION_STRING = `mongodb://${encodedUsername}:${encodedPassword}@authdb-service:5350/?authSource=admin`;
 
 // MongoDB connection
 mongoose.connect(CONNECTION_STRING, {
