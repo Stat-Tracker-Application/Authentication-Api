@@ -18,13 +18,11 @@ const decodedPassword = Buffer.from(
 
 const encodedUsername = encodeURIComponent(decodedUsername);
 const encodedPassword = encodeURIComponent(decodedPassword);
-const CONNECTION_STRING = `mongodb://${encodedUsername}:${encodedPassword}@authdb-service:5350/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
-// MongoDB connection
+const CONNECTION_STRING = `mongodb://${decodedUsername}:${decodedPassword}@authdb-service:5350/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
+
 mongoose.connect(CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  authSource: "admin", // Add this line
-  authMechanism: "SCRAM-SHA-256", // Add this line
 });
 
 console.log(CONNECTION_STRING);
