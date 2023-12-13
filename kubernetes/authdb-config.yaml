@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: authdb-config
 data:
-  authdb-url: mongodb://authdb-service:5350
+  authdb-url: authdb-service:5350
