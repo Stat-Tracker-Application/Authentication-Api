@@ -16,8 +16,11 @@ const decodedPassword = Buffer.from(
   "base64"
 ).toString("utf-8");
 
-const encodedUsername = encodeURIComponent(decodedUsername);
-const encodedPassword = encodeURIComponent(decodedPassword);
+console.log(decodedUsername);
+console.log(decodedPassword);
+
+// const encodedUsername = encodeURIComponent(decodedUsername);
+// const encodedPassword = encodeURIComponent(decodedPassword);
 const CONNECTION_STRING = `mongodb://${decodedUsername}:${decodedPassword}@authdb-service:5350/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
 
 mongoose.connect(CONNECTION_STRING, {
