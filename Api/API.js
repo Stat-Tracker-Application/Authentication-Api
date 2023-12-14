@@ -7,13 +7,11 @@ import "dotenv/config";
 
 const app = express();
 
-const decodedUsername = Buffer.from(process.env.AUTHDB_USER, "base64").toString(
-  "utf-8"
-);
-const decodedPassword = Buffer.from(
-  process.env.AUTHDB_PASSWORD,
-  "base64"
-).toString("utf-8");
+const customDecode = (base64String) =>
+  Buffer.from(base64String, "base64").toString("latin1");
+
+const decodedUsername = customDecode(process.env.AUTHDB_USER);
+const decodedPassword = customDecode(process.env.AUTHDB_PASSWORD);
 
 console.log(decodedUsername);
 console.log(decodedPassword);
