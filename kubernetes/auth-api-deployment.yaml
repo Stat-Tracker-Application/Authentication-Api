@@ -15,6 +15,7 @@ spec:
       containers:
         - name: auth-api
           image: lokitheshady/stat-tracker-auth-api:latest
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "128Mi"

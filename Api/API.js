@@ -3,12 +3,13 @@ import bodyparser from "body-parser";
 import mongoose from "mongoose";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import iconv from "iconv-lite";
 import "dotenv/config";
 
 const app = express();
 
 const customDecode = (base64String) =>
-  Buffer.from(base64String, "base64").toString("latin1");
+  iconv.decode(Buffer.from(base64String, "base64"), "latin1");
 
 const decodedUsername = customDecode(process.env.AUTHDB_USER);
 const decodedPassword = customDecode(process.env.AUTHDB_PASSWORD);
