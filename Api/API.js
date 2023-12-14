@@ -3,32 +3,32 @@ import bodyparser from "body-parser";
 import mongoose from "mongoose";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { atob } from "atob";
 
 import "dotenv/config";
 
 const app = express();
 
-const decodedUsername = Buffer.from(process.env.AUTHDB_USER, "base64").toString(
-  "utf-8"
-);
-const decodedPassword = Buffer.from(
-  process.env.AUTHDB_PASSWORD,
-  "base64"
-).toString("utf-8");
+const decodedUsername = atob(process.env.AUTHDB_USER);
+const decodedPassword = atob(process.env.AUTHDB_PASSWORD);
 
 console.log(decodedUsername);
 console.log(decodedPassword);
 
-// const encodedUsername = encodeURIComponent(decodedUsername);
-// const encodedPassword = encodeURIComponent(decodedPassword);
-const CONNECTION_STRING = `mongodb://${decodedUsername}:${decodedPassword}@authdb-service:5350/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
+const encodedUsername = encodeURIComponent(decodedUsername);
+const encodedPassword = encodeURIComponent(decodedPassword);
+
+console.log(encodedUsername);
+console.log(encodedPassword);
+
+const CONNECTION_STRING = `mongodb://${encodedUsername}:${encodedPassword}@authdb-service:5350/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
+
+console.log(CONNECTION_STRING);
 
 mongoose.connect(CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
-console.log(CONNECTION_STRING);
 
 const authSchema = new mongoose.Schema({
   username: String,
