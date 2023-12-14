@@ -25,13 +25,13 @@ spec:
           env:
             - name: AUTHDB_USER
               valueFrom:
-                secretKeyRef:
-                  name: authdb-secret
+                configMapKeyRef:
+                  name: authdb-config
                   key: authdb-user
             - name: AUTHDB_PASSWORD
               valueFrom:
-                secretKeyRef:
-                  name: authdb-secret
+                configMapKeyRef:
+                  name: authdb-config
                   key: authdb-password
             - name: MONGODB_URL
               valueFrom:

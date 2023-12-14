@@ -8,22 +8,26 @@ import "dotenv/config";
 
 const app = express();
 
-const customDecode = (base64String) =>
-  iconv.decode(Buffer.from(base64String, "base64"), "latin1");
+// const customDecode = (base64String) =>
+//   iconv.decode(Buffer.from(base64String, "base64"), "latin1");
 
-const decodedUsername = customDecode(process.env.AUTHDB_USER);
-const decodedPassword = customDecode(process.env.AUTHDB_PASSWORD);
+// const decodedUsername = customDecode(process.env.AUTHDB_USER);
+// const decodedPassword = customDecode(process.env.AUTHDB_PASSWORD);
 
-console.log(decodedUsername);
-console.log(decodedPassword);
+// console.log(decodedUsername);
+// console.log(decodedPassword);
 
-const encodedUsername = encodeURIComponent(decodedUsername);
-const encodedPassword = encodeURIComponent(decodedPassword);
+// const encodedUsername = encodeURIComponent(decodedUsername);
+// const encodedPassword = encodeURIComponent(decodedPassword);
 
-console.log(encodedUsername);
-console.log(encodedPassword);
+// console.log(encodedUsername);
+// console.log(encodedPassword);
+//decoding does not work
 
-const CONNECTION_STRING = `mongodb://${encodedUsername}:${encodedPassword}@authdb-service:5350/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
+const username = process.env.AUTHDB_USER;
+const password = process.env.AUTHDB_PASSWORD;
+
+const CONNECTION_STRING = `mongodb://${username}:${password}@authdb-service:5350/admin?authSource=admin&authMechanism=SCRAM-SHA-256`;
 
 console.log(CONNECTION_STRING);
 

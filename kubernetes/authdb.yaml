@@ -23,13 +23,13 @@ spec:
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
-                secretKeyRef:
-                  name: authdb-secret
+                configMapKeyRef:
+                  name: authdb-config
                   key: authdb-user
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
-                secretKeyRef:
-                  name: authdb-secret
+                configMapKeyRef:
+                  name: authdb-config
                   key: authdb-password
 ---
 apiVersion: v1

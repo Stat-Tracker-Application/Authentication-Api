@@ -4,3 +4,5 @@ metadata:
   name: authdb-config
 data:
   authdb-url: authdb-service:5350
+  authdb-user: User1 ##encoding to base 64 and decoding in the app does not work
+  authdb-password: Adminpw ##encoding to base 64 and decoding in the app does not work
