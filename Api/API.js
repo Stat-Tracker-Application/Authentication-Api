@@ -3,8 +3,6 @@ import bodyparser from "body-parser";
 import mongoose from "mongoose";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { atob } from "atob";
-
 import "dotenv/config";
 
 const app = express();
