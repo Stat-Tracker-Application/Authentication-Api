@@ -9,8 +9,14 @@ import "dotenv/config";
 
 const app = express();
 
-const decodedUsername = atob(process.env.AUTHDB_USER);
-const decodedPassword = atob(process.env.AUTHDB_PASSWORD);
+const decodedUsername = Buffer.from(
+  process.env.AUTHDB_USER,
+  "base64"
+).toString();
+const decodedPassword = Buffer.from(
+  process.env.AUTHDB_PASSWORD,
+  "base64"
+).toString();
 
 console.log(decodedUsername);
 console.log(decodedPassword);
