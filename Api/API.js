@@ -91,7 +91,10 @@ app.post("/user/login", async function (req, res) {
       res.status(401).send("incorrect username or password");
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+      accestoken: process.env.ACCESS_TOKEN_SECRET,
+    });
   }
 });
 
