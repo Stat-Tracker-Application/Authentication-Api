@@ -81,8 +81,8 @@ app.post("/user/login", async function (req, res) {
   try {
     if (await bcryptjs.compare(req.body.password, user.hashedpassword)) {
       const tokenuser = { username: user.username };
-      const accestoken = jwt.sign(tokenuser, process.env.ACCES_TOKEN_SECRET);
-      console.log(process.env.ACCES_TOKEN_SECRET);
+      const accestoken = jwt.sign(tokenuser, process.env.ACCESS_TOKEN_SECRET);
+      console.log(process.env.ACCESS_TOKEN_SECRET);
 
       res
         .status(200)
@@ -101,9 +101,9 @@ app.get("/authenticatetoken", async function (req, res) {
 
   if (token === undefined || token === null) res.sendStatus(401);
 
-  jwt.verify(token, process.env.ACCES_TOKEN_SECRET, function (err, user) {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, user) {
     if (err) {
-      console.log(process.env.ACCES_TOKEN_SECRET);
+      console.log(process.env.ACCESS_TOKEN_SECRET);
       res.sendStatus(403);
     }
     res.status(200).json({ user });

@@ -43,13 +43,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: stat-tracker-auth-api-service
+  name: auth-api
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
-    app: stat-tracker-auth-api
+    app: auth-api
   ports:
     - protocol: TCP
       port: 5300
       targetPort: 5300
-      nodePort: 30530
