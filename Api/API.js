@@ -142,4 +142,25 @@ app.get("/authenticatetoken", async function (req, res) {
     res.status(200).json({ user });
   });
 });
+
+// Delete all users with a given username
+app.delete("/user/deleteusersbyusername", async (req, res) => {
+  try {
+    const { username } = req.body;
+    const deletedUsers = await AuthModel.deleteMany({ username });
+
+    if (deletedUsers.deletedCount > 0) {
+      res.json({
+        message: `Users with username '${username}' deleted successfully`,
+      });
+    } else {
+      res
+        .status(404)
+        .json({ message: `No users found with username '${username}'` });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default app;
