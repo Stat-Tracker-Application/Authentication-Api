@@ -39,7 +39,7 @@ async function ensureQueueExists(channel, queue) {
 }
 
 async function sendUserQueueMessage(message) {
-  const connection = await amqp.connect("amqp://rabbitmq:5672");
+  const connection = await amqp.connect("amqp://helm-rabbitmq:5672");
   const channel = await connection.createChannel();
 
   const queue = "user_queue";
@@ -57,7 +57,7 @@ async function sendUserQueueMessage(message) {
 }
 
 async function receiveUserQueueMessage() {
-  const connection = await amqp.connect("amqp://rabbitmq:5672");
+  const connection = await amqp.connect("amqp://helm-rabbitmq:5672");
   const channel = await connection.createChannel();
 
   const queue = "user_queue";
