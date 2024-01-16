@@ -51,6 +51,7 @@ async function sendUserQueueMessage(message) {
   console.log(`Message sent: ${message}`);
 
   setTimeout(() => {
+    console.log("failed to send message");
     connection.close();
   }, 500);
 }
