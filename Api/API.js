@@ -5,24 +5,9 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import iconv from "iconv-lite";
 import "dotenv/config";
+import amqp from "amqplib";
 
 const app = express();
-
-// const customDecode = (base64String) =>
-//   iconv.decode(Buffer.from(base64String, "base64"), "latin1");
-
-// const decodedUsername = customDecode(process.env.AUTHDB_USER);
-// const decodedPassword = customDecode(process.env.AUTHDB_PASSWORD);
-
-// console.log(decodedUsername);
-// console.log(decodedPassword);
-
-// const encodedUsername = encodeURIComponent(decodedUsername);
-// const encodedPassword = encodeURIComponent(decodedPassword);
-
-// console.log(encodedUsername);
-// console.log(encodedPassword);
-//decoding does not work
 
 const username = process.env.AUTHDB_USER;
 const password = process.env.AUTHDB_PASSWORD;
@@ -48,6 +33,38 @@ const AuthModel = mongoose.model("Auth", authSchema);
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 
+async function sendUserQueueMessage(message) {
+  const connection = await amqp.connect("amqp://rabbitmq:5672");
+  const channel = await connection.createChannel();
+
+  const queue = "user_queue";
+
+  channel.assertQueue(queue, { durable: false });
+  channel.sendToQueue(queue, Buffer.from(message));
+
+  console.log(`Message sent: ${message}`);
+
+  setTimeout(() => {
+    connection.close();
+  }, 500);
+}
+
+async function receiveUserQueueMessage() {
+  const connection = await amqp.connect('amqp://rabbitmq:5672');
+  const channel = await connection.createChannel();
+
+  const queue = 'user_queue';
+
+  channel.assertQueue(queue, { durable: false });
+  console.log(`Waiting for messages from ${queue}`);
+
+  channel.consume(queue, (msg) => {
+    if (msg) {
+      console.log(`Received message: ${msg.content.toString()}`);
+      channel.ack(msg);
+    }
+  });
+
 app.get("/", function (req, res) {
   res.json({
     message: "Hello world from auth api",
@@ -61,7 +78,9 @@ app.post("/user/signup", async function (req, res) {
 
     const newuser = new AuthModel({ username, hashedpassword });
 
-    await newuser.save();
+    await newuser.save().then(
+      sendUserQueueMessage("New user created.")
+    )
 
     res.status(201).json({
       username: newuser.username,
