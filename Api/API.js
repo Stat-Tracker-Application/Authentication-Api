@@ -33,50 +33,50 @@ const AuthModel = mongoose.model("Auth", authSchema);
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 
-async function ensureQueueExists(channel, queue) {
-  // Assert the queue, it will be created if it does not exist
-  await channel.assertQueue(queue, { durable: false });
-}
+// async function ensureQueueExists(channel, queue) {
+//   // Assert the queue, it will be created if it does not exist
+//   await channel.assertQueue(queue, { durable: false });
+// }
 
-async function sendUserQueueMessage(message) {
-  const connection = await amqp.connect(
-    "amqp://apiuser:apipassword@helm-rabbitmq:5672"
-  );
-  const channel = await connection.createChannel();
+// async function sendUserQueueMessage(message) {
+//   const connection = await amqp.connect(
+//     "amqp://apiuser:apipassword@helm-rabbitmq:5672"
+//   );
+//   const channel = await connection.createChannel();
 
-  const queue = "user_queue";
+//   const queue = "user_queue";
 
-  await ensureQueueExists(channel, queue);
+//   await ensureQueueExists(channel, queue);
 
-  channel.sendToQueue(queue, Buffer.from(message));
+//   channel.sendToQueue(queue, Buffer.from(message));
 
-  console.log(`Message sent: ${message}`);
+//   console.log(`Message sent: ${message}`);
 
-  setTimeout(() => {
-    console.log("failed to send message");
-    connection.close();
-  }, 500);
-}
+//   setTimeout(() => {
+//     console.log("failed to send message");
+//     connection.close();
+//   }, 500);
+// }
 
-async function receiveUserQueueMessage() {
-  const connection = await amqp.connect(
-    "amqp://apiuser:apipassword@helm-rabbitmq:5672"
-  );
-  const channel = await connection.createChannel();
+// async function receiveUserQueueMessage() {
+//   const connection = await amqp.connect(
+//     "amqp://apiuser:apipassword@helm-rabbitmq:5672"
+//   );
+//   const channel = await connection.createChannel();
 
-  const queue = "user_queue";
+//   const queue = "user_queue";
 
-  await ensureQueueExists(channel, queue);
+//   await ensureQueueExists(channel, queue);
 
-  console.log(`Waiting for messages from ${queue}`);
+//   console.log(`Waiting for messages from ${queue}`);
 
-  channel.consume(queue, (msg) => {
-    if (msg) {
-      console.log(`Received message: ${msg.content.toString()}`);
-      channel.ack(msg);
-    }
-  });
-}
+//   channel.consume(queue, (msg) => {
+//     if (msg) {
+//       console.log(`Received message: ${msg.content.toString()}`);
+//       channel.ack(msg);
+//     }
+//   });
+// }
 
 app.get("/", function (req, res) {
   res.json({
@@ -91,7 +91,7 @@ app.post("/user/signup", async function (req, res) {
 
     const newuser = new AuthModel({ username, hashedpassword });
 
-    await newuser.save().then(sendUserQueueMessage("New user created."));
+    await newuser.save();
 
     res.status(201).json({
       username: newuser.username,
