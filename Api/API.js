@@ -33,13 +33,19 @@ const AuthModel = mongoose.model("Auth", authSchema);
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 
+async function ensureQueueExists(channel, queue) {
+  // Assert the queue, it will be created if it does not exist
+  await channel.assertQueue(queue, { durable: false });
+}
+
 async function sendUserQueueMessage(message) {
   const connection = await amqp.connect("amqp://rabbitmq:5672");
   const channel = await connection.createChannel();
 
   const queue = "user_queue";
 
-  channel.assertQueue(queue, { durable: false });
+  await ensureQueueExists(channel, queue);
+
   channel.sendToQueue(queue, Buffer.from(message));
 
   console.log(`Message sent: ${message}`);
@@ -55,7 +61,8 @@ async function receiveUserQueueMessage() {
 
   const queue = "user_queue";
 
-  channel.assertQueue(queue, { durable: false });
+  await ensureQueueExists(channel, queue);
+
   console.log(`Waiting for messages from ${queue}`);
 
   channel.consume(queue, (msg) => {
